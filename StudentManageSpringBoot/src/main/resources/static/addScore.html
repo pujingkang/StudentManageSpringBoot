@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加成绩</title>
+    <script type="text/javascript">
+        function addScore() {
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("post", "addScore.do", true);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    if (xmlhttp.responseText === "true") {
+                        location.href = "score.html";
+                    } else {
+                        alert(xmlhttp.responseText)
+                    }
+                }
+            }
+
+            xmlhttp.setRequestHeader("Content-type",
+                "application/x-www-form-urlencoded");
+            courseID2 = document.getElementById("courseID").value
+            stuID2 = document.getElementById("stuID").value
+            baseScore2 = document.getElementById("baseScore").value
+            testScore2 = document.getElementById("testScore").value
+            xmlhttp.send("courseID=" + courseID2
+                + "&stuID=" + stuID2
+                + "&baseScore=" + baseScore2
+                + "&testScore=" + testScore2);
+        }
+    </script>
+</head>
+<body>
+<div align="center">
+    <h1>添加成绩</h1>
+    <hr>
+    <div>
+        <table>
+            <tr><td>课程名称：</td><td><input type="text" id = "courseID"/><br></td></tr>
+            <tr><td>学生学号：</td><td><input type="text" id = "stuID"/><br></td></tr>
+            <tr><td>平时成绩：</td><td><input type="text" id="baseScore"/><br></td></tr>
+            <tr><td>考核成绩：</td><td><input type="text" id="testScore"/><br></td></tr>
+        </table>
+        <button onclick="addScore()">添加</button><br>
+    </div>
+</div>
+</body>
+</html>

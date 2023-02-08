@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理成绩</title>
+    <script type="text/javascript">
+        function getScore() {
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("get", "viewScore.do", true);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    json = eval("(" + xmlhttp.responseText + ")");
+                    document.getElementById("scoreList").innerHTML = display(json);
+                }
+            }
+            xmlhttp.send();
+        }
+
+        function selectScore(){
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("post","viewScore.do",true);
+            xmlhttp.onreadystatechange = function (){
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    json = eval("(" + xmlhttp.responseText + ")");
+                    document.getElementById("scoreList").innerHTML = display(json);
+                }
+            }
+
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            name2=document.getElementById("name").value
+            major2=document.getElementById("major").value
+            xmlhttp.send("name="+name2+"&major="+major2);
+        }
+
+        function display(jsons) {
+            let content = "";
+            content += "<table border='1'> <tr> <th>序  号</th>"
+            content += "<th>姓  名</th> <th>课程名称</th> <th>平时成绩</th> <th>考核成绩</th> <th>最终成绩</th> <th>操  作</th></tr>"
+            for (let i = 0; i < jsons.length; i++) {
+                content += "<tr><td>" + (i + 1) + "</td>"
+                content += "<td>" + jsons[i].courseID + "</td>"
+                content += "<td>" + jsons[i].courseID + "</td>"
+                content += "<td>" + jsons[i].baseScore + "</td>"
+                content += "<td>" + jsons[i].testScore + "</td>"
+                content += "<td>" + ((jsons[i].baseScore * 0.4) + (jsons[i].testScore * 0.6)).toFixed(2) + "</td>"
+                content += "<td><button onclick='deleteScore(\"" + jsons[i].id + "\")'>删除</button>"
+            }
+            content += "</table>"
+            return content;
+        }
+
+        function deleteScore(id) {
+            if (!confirm("确定要删除：" + id + "的记录吗？"))
+                return;
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("get", "deleteScore.do?id=" + id, true);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    if (xmlhttp.responseText === "true") {
+                        alert("记录" + id + "已被成功删除！")
+                        getScore();
+                    } else {
+                        alert("记录" + id + "删除失败！")
+                    }
+                }
+            }
+            xmlhttp.send();
+        }
+    </script>
+</head>
+<body onload="getScore()">
+<div align="center">
+    <h1>成绩信息表</h1>
+    <a href="addScore.html">添加成绩</a>
+    <div id="scoreList"></div>
+    <a href="success.html">返回</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+    <script type="text/javascript">
+        function getStu(){
+            value = location.search.substring(1);
+
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("get","updateStu.do?stuID="+value,true);
+            xmlhttp.onreadystatechange = function (){
+                if (xmlhttp.readyState===4 && xmlhttp.status===200){
+                    json = eval("("+xmlhttp.responseText+")");
+                    document.getElementById("uid").innerHTML=json.stuID;
+                    document.getElementById("stuID").value=json.stuID;
+                    document.getElementById("name").value=json.stuName;
+                    document.getElementById("sex").value=json.sex;
+                }
+            }
+            xmlhttp.send();
+        }
+
+        function updateStu(){
+            if (window.XMLHttpRequest){
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.open("post","updateStu.do",true);
+            xmlhttp.onreadystatechange = function (){
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    if (xmlhttp.responseText === "true") {
+                        location.href = "student.html";
+                    } else {
+                        alert(xmlhttp.responseText)
+                    }
+                }
+            }
+            xmlhttp.setRequestHeader("Content-type",
+                "application/x-www-form-urlencoded");
+            user=document.getElementById("stuID").value
+            name2=document.getElementById("name").value
+            sex2=document.getElementById("sex").value
+            xmlhttp.send("stuID="+user+"&stuName="+name2+"&sex="+sex2);
+        }
+    </script>
+</head>
+<body onload="getStu()">
+<div align="center">
+    <h1>修改学生：<label id="uid"></label>的信息</h1>
+    <div>
+        <input type="hidden" id="stuID"  />
+        姓 名：<input type="text" id="name" /><br>
+        性 别：<input type="text" id="sex" /><br>
+        <button onclick="updateStu()" >修改</button>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.souls.mapper.StudentInfoMapper">
+    <select id="getStuByID" parameterType="String" resultType="StudentInfo">
+        select * from studentinfo where stuID = #{stuID}
+    </select>
+
+    <select id="getAllStudent" resultType="StudentInfo">
+        select * from studentinfo
+    </select>
+
+    <update id="updateLoginInfo">
+        update studentinfo set count = #{count}, errorTime = #{time} where stuID = #{stuID}
+    </update>
+
+    <update id="updateStu" parameterType="StudentInfo">
+        update studentinfo set stuName=#{stuName}, sex=#{sex} where stuID=#{stuID}
+    </update>
+
+    <delete id="deleteStu" parameterType="String">
+        delete from studentinfo where stuID = #{stuID}
+    </delete>
+
+    <insert id="addStudent" parameterType="StudentInfo">
+        insert into studentinfo(stuID,stuName,sex,enrollTime,majorID,numID,password)
+        values(#{stuID},#{stuName},#{sex},#{enrollTime},#{majorID},#{numID},#{password})
+    </insert>
+
+    <select id="selectStu" resultType="StudentInfo">
+        SELECT * FROM studentinfo WHERE stuName LIKE  "%"#{name}"%" AND majorID = #{major}
+    </select>
+
+    <select id="getMaxXH"  resultType="String">
+        select max(stuID) from studentinfo
+    </select>
+</mapper>

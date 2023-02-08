@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加学生</title>
+    <script type="text/javascript">
+        function addStu() {
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("post", "addStu.do", true);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    if (xmlhttp.responseText === "true") {
+                        location.href = "student.html";
+                    } else {
+                        alert(xmlhttp.responseText)
+                    }
+                }
+            }
+
+            xmlhttp.setRequestHeader("Content-type",
+                "application/x-www-form-urlencoded");
+            sstuid = document.getElementById("stuID").value
+            name2 = document.getElementById("name").value
+            //sex2 = document.getElementById("sex1").value
+            sex2 = getOption()
+            enrollTime2 = document.getElementById("enrollTime").value
+            major2 = document.getElementById("major").value
+            numID2 = document.getElementById("numID").value
+            pwd2 = document.getElementById("pwd").value
+            xmlhttp.send("stuID="+sstuid + "&stuName=" + name2 + "&sex=" + sex2 + "&enrollTime=" + enrollTime2 + "&majorID=" + major2 + "&numID=" + numID2 + "&password=" + pwd2);
+        }
+        function getOption()
+        {
+            let sex=document.getElementsByName("sex");
+            for(let i = 0; i < sex.length; i++) {
+                if (sex[i].checked)
+                    //alert(sex[i].value);
+                    return sex[i].value;
+            }
+        }
+
+        function test( )
+        {
+            var obj = document.getElementById("kk");
+            var index = obj.selectedIndex; // 选中索引
+            var text = obj.options[index].text; // 选中文本
+            var value = obj.options[index].value;
+            alert(value)
+
+        }
+
+        function isPwd() {
+            let text = document.getElementById("pwd").value;
+            let re = /^(?=.*[a-z])(?=.*\d)[^]{8,16}$/;
+            let result = re.test(text);
+            if (!result) {
+                document.getElementById("tip1").innerHTML = "<font color='red'>密码必须包含数字,字母,且不少于8位!</font>";
+                return false;
+            } else {
+                document.getElementById("tip1").innerHTML = "<font color='green'>密码符合要求!</font>";
+                return true;
+            }
+        }
+
+        function checkPassword() {
+            let password = document.getElementById("pwd").value;
+            let repassword = document.getElementById("repwd").value;
+
+            if (password === repassword) {
+                document.getElementById("tip2").innerHTML = "<font color='green'>两次密码输入一致!</font>";
+                document.getElementById("submit").disabled = false;
+
+            } else {
+                document.getElementById("tip2").innerHTML = "<font color='red'>两次输入密码不一致!</font>";
+                document.getElementById("submit").disabled = true;
+            }
+        }
+
+        function getNewID(){
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("get","addStu.do",true);
+            xmlhttp.onreadystatechange = function (){
+                if (xmlhttp.readyState===4 && xmlhttp.status===200){
+                    json = eval("("+xmlhttp.responseText+")");
+                    document.getElementById("stuID").innerHTML=json.stuID;
+                    document.getElementById("stuID").value=json.stuID;
+                    // document.getElementById("name").value=json.stuName;
+                    // document.getElementById("sex").value=json.sex;
+                }
+            }
+            xmlhttp.send();
+        }
+    </script>
+</head>
+<body onload="getNewID()">
+<div align="center">
+    <h1>添加学生</h1>
+    <hr>
+    <div>
+        <table>
+            <tr><td>ID：</td><td><input type="text" id = "stuID" readonly="readonly"/><br></td></tr>
+            <tr><td>姓名：</td><td><input type="text" id = "name"/><br></td></tr>
+
+            <tr><td>身份证号：</td><td><input type="text" id = "numID"/><br></td></tr>
+
+            <!-- <tr><td>密 码：</td><td><input type="password" id="pwd"/><br></td></tr> -->
+            <tr><td>密 码：</td><td><input id="pwd" type="password" placeholder="密码不少于8位" onkeyup="isPwd()"><span id="tip1"></span></input></td></tr>
+            <tr><td>确认密码：</td><td><input id="repwd" type="password" placeholder="请保持两次输入一致" onkeyup="checkPassword()"><span id="tip2"></span></input></td></tr>
+
+            <!-- <tr><td>性别：</td><td><input type="text" id = "sex"/><br></td></tr> -->
+            <tr><td>性别：</td><td><input type="radio" id="sex1" value="男" name="sex"/>男
+                                  <input type="radio" id="sex2" value="女" name="sex"/>女
+                              </td></tr>
+
+            <tr><td>入学时间：</td><td><input type="date" id = "enrollTime"/><br></td></tr>
+
+            <!-- <tr><td>专业：</td><td><input type="text" id = "major"/><br></td></tr>-->
+            <tr><td>专业：</td><td><select id="major">
+                <option value="0001">计算机控制</option>
+                <option value="0002">网络安全</option>
+                <option value="0003">计算机应用</option>
+            </select></td></tr>
+        </table>
+        <button onclick="addStu()">添加</button><br>
+    </div>
+</div>
+
+</body>
+</html>

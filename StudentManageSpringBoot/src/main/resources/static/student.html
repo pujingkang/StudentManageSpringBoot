@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生管理</title>
+    <script type="text/javascript">
+        function getStudents() {
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("get", "view.do", true);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    json = eval("(" + xmlhttp.responseText + ")");
+                    document.getElementById("students").innerHTML = display(json);
+                }
+            }
+            xmlhttp.send();
+        }
+
+        function selectStu(){
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("post","view.do",true);
+            xmlhttp.onreadystatechange = function (){
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    json = eval("(" + xmlhttp.responseText + ")");
+                    document.getElementById("students").innerHTML = display(json);
+                }
+            }
+
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            name2=document.getElementById("name").value
+            major2=document.getElementById("major").value
+            xmlhttp.send("name="+name2+"&major="+major2);
+        }
+
+        // 序号--学号--姓名--性别--入学日期--年龄--操作
+        function display(jsons) {
+            let content = "";
+            let date = new Date().getFullYear();
+            let map = ["","计算机控制","网络安全","计算机应用"];
+            content += "<table border='1'> <tr> <th>序  号</th>"
+            content += "<th>学  号</th> <th>姓  名</th> <th>性  别</th> <th>专 业</th> <th>入学日期</th> <th>年  龄</th> <th>操  作</th></tr>"
+            for (let i = 0; i < jsons.length; i++) {
+                content += "<tr><td>" + (i + 1) + "</td>"
+                content += "<td>" + jsons[i].stuID + "</td>"
+                content += "<td>" + jsons[i].stuName + "</td>"
+                content += "<td>" + jsons[i].sex + "</td>"
+                content += "<td>" + map[jsons[i].majorID] + "</td>"
+                content += "<td>" + jsons[i].enrollTime + "</td>"
+                content += "<td>" + (date - (jsons[i].numID.substring(6, 10))) + "</td>"
+                content += "<td><button onclick='deleteStu(\"" + jsons[i].stuID + "\")'>删除</button>"
+                content += "<button onclick='updateStu(\"" + jsons[i].stuID + "\")'>修改</button></td></tr>"
+            }
+            content += "</table>"
+            return content;
+        }
+
+        function deleteStu(stuID) {
+            if (!confirm("确定要删除学生：" + stuID + "的信息吗？"))
+                return;
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlhttp.open("get", "deleteStu.do?stuID=" + stuID, true);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    if (xmlhttp.responseText === "true") {
+                        alert("学生" + stuID + "已被成功删除！")
+                        getStudents();
+                    } else {
+                        alert("学生" + stuID + "删除失败！")
+                    }
+                }
+            }
+            xmlhttp.send();
+        }
+
+        function updateStu(stuID) {
+            if (!confirm("确定要修改学生：" + stuID + "的信息吗？"))
+                return;
+            location.href = "update.html?" + stuID;
+        }
+    </script>
+</head>
+<body onload="getStudents()">
+<div align="center">
+    <h1>学生信息表</h1>
+    <a href="addStu.html">添加学生</a>
+    <div>
+        <table>
+            <tr><td>姓名：</td><td><input type="text" id="name"/></td>
+                <td>专业：</td>
+                <td><select id="major">
+                    <option value="0001">计算机控制</option>
+                    <option value="0002">网络安全</option>
+                    <option value="0003">计算机应用</option>
+                </select></td>
+                <td><button onclick="selectStu()">查询</button></td>
+            </tr>
+        </table>
+    </div>
+    <div id="students"></div>
+    <a href="success.html">返回</a>
+</div>
+</body>
+</html>
