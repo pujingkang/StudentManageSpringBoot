@@ -12,6 +12,7 @@ import java.util.UUID;
 @Component
 @Aspect
 public class QueryAspectInfo {
+    RedisUtil redisUtil = null;
     //使用一个返回值为空并且方法体为空的函数来定义切入点
     @Pointcut("execution(* com.souls.service.*.query*(..))")
     private void myPointCut(){}
@@ -38,17 +39,17 @@ public class QueryAspectInfo {
         //第一个参数是pageInfo
         PageInfo pageInfo = (PageInfo) args[0];
         if(pageInfo.getUuid() == null||"".equals(pageInfo.getUuid())){
-            String uuid = QueryPools.searchUUidByMethod(stf.toString());
+            String uuid = QueryPools.searchUUidByMethod(stf.toString(),redisUtil);
             if (uuid==null){
                 Object resultData = joinPoint.proceed();//直接调用原方法
 
                 uuid = UUID.randomUUID().toString();
-                QueryPools.addQueryData(uuid,(List<Object>)resultData);
-                QueryPools.addQueryMethod(stf.toString(),uuid);
+                QueryPools.addQueryData(uuid,(List<Object>)resultData,redisUtil);
+                QueryPools.addQueryMethod(stf.toString(),uuid,redisUtil);
             }
             pageInfo.setUuid(uuid);
         }
-        return QueryPools.getDataFromPools(pageInfo);
+        return QueryPools.getDataFromPools(pageInfo,redisUtil);
     }
 
 }
