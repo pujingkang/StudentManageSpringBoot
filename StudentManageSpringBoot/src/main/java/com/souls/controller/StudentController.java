@@ -6,10 +6,8 @@ import com.souls.utils.XHPools;
 import com.souls.vo.PageInfo;
 import com.souls.vo.StudentInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -19,8 +17,7 @@ public class StudentController {
     @Autowired
     private StudentInfoService service;
 
-    @RequestMapping("/login.do")
-    @ResponseBody
+    @PostMapping("/login.do")
     public String login(StudentInfo stu, HttpSession session) {
         StudentInfoVo vo = service.login(stu.getStuID(), stu.getPassword());
         if (vo.getStudentInfo() != null) {
@@ -32,26 +29,22 @@ public class StudentController {
         return vo.getMessage();
     }
 
-    @RequestMapping(value = "/view.do", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping(value = "/view.do")
     public List<StudentInfo> viewAllStudent() {
         return  service.getAllStudent();
     }
 
-    @RequestMapping(value = "/view.do", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping(value = "/view.do")
     public List<StudentInfo> viewStudent(String name, Integer major) {
         return service.selectStu(name, major);
     }
 
-    @RequestMapping(value = "/viewAll.do")
-    @ResponseBody
+    @GetMapping(value = "/viewAll.do")
     public PageInfo getAllStu(PageInfo pageInfo){
         return (PageInfo) service.queryAllStudent(pageInfo);
     }
 
-    @RequestMapping(value = "/addStu.do", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping(value = "/addStu.do")
     public StudentInfo getID(HttpSession session) {
         synchronized (XHPools.max){
             if (XHPools.max == 0){
@@ -65,8 +58,7 @@ public class StudentController {
         return info;
     }
 
-    @RequestMapping(value = "/addStu.do", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping(value = "/addStu.do")
     public String addStu(StudentInfo stu,HttpSession session) {
 //        String id = service.createStuID();
 //        synchronized (XHPools.max){
@@ -79,20 +71,17 @@ public class StudentController {
         return service.addStudent(stu).toString();
     }
 
-    @RequestMapping("/deleteStu.do")
-    @ResponseBody
+    @GetMapping("/deleteStu.do")
     public String deleteStu(String stuID) {
         return service.deleteStu(stuID).toString();
     }
 
-    @RequestMapping(value = "/updateStu.do", method = RequestMethod.GET)
-    @ResponseBody
+    @GetMapping(value = "/updateStu.do")
     public Object getStu(String stuID) {
         return service.getStudentByID(stuID);
     }
 
-    @RequestMapping(value = "/updateStu.do", method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping(value = "/updateStu.do")
     public String updateStu(StudentInfo stu) {
         String s = service.updateStu(stu).toString();
         return s;
