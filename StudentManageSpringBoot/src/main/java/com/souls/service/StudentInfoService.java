@@ -15,7 +15,7 @@ public interface StudentInfoService {
 
     List<StudentInfo> getAllStudent();
 
-    List<StudentInfo> queryAllStudent(PageInfo pageInfo);
+    Object queryAllStudent(PageInfo pageInfo);
 
     Boolean deleteStu(String id);
 

@@ -58,7 +58,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         return stuMapper.getAllStudent();
     }
 
-    public List<StudentInfo> queryAllStudent(PageInfo pageInfo){return stuMapper.getAllStudent();}
+    public List<Object> queryAllStudent(PageInfo pageInfo){return stuMapper.queryAllStudent();}
 
     @Override
     public Boolean deleteStu(String id) {

@@ -14,6 +14,8 @@ public interface StudentInfoMapper {
 
     List<StudentInfo> getAllStudent();
 
+    List<Object> queryAllStudent();
+
     Boolean updateLoginInfo(@Param("stuID") String stuID, @Param("time") Long time, @Param("count") Integer count);
 
     Boolean updateStu(StudentInfo stu);

@@ -11,6 +11,10 @@
         select * from studentinfo
     </select>
 
+    <select id="queryAllStudent" resultType="StudentInfo">
+        select * from studentinfo
+    </select>
+
     <update id="updateLoginInfo">
         update studentinfo set count = #{count}, errorTime = #{time} where stuID = #{stuID}
     </update>
