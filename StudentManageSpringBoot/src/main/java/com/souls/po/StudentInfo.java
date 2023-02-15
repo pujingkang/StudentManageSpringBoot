@@ -2,8 +2,10 @@ package com.souls.po;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
-public class StudentInfo {
+public class StudentInfo implements Serializable {
     private String stuID;
     private String stuName;
     private Integer majorID;

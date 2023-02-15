@@ -1,5 +1,7 @@
 package com.souls.test;
 
+import java.util.Comparator;
+
 public class Demo implements IDemo {
 
     @Override

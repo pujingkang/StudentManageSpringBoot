@@ -6,15 +6,19 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 @Component
 @Aspect
 public class QueryAspectInfo {
+    @Resource
     RedisUtil redisUtil = null;
     //使用一个返回值为空并且方法体为空的函数来定义切入点
-    @Pointcut("execution(* com.souls.service.impl.query*(..))")
+    @Pointcut("execution(* com.souls.service.impl.*.query*(..))")
     private void myPointCut(){}
 
     @Around("myPointCut()")

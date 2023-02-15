@@ -1,7 +1,6 @@
 package com.souls.utils;
 
 import com.souls.vo.PageInfo;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +13,8 @@ public class QueryPools {
 
     //将查询结果添加到缓存中
     public static void addQueryData(String uuid, List<Object> value, RedisUtil redisUtil) {
-        if (redisUtil == null) pools.put(uuid, value);
+        if (redisUtil == null)
+            pools.put(uuid, value);
         else
             redisUtil.saveObjectByByte(uuid, value);
     }
@@ -36,8 +36,10 @@ public class QueryPools {
 
     public static PageInfo getDataFromPools(PageInfo pageInfo, RedisUtil redisUtil) {
         List<Object> srcList = null;
-        if (redisUtil == null) srcList = pools.get(pageInfo.getUuid());
-        else srcList = (List<Object>) redisUtil.getObjectFromByte(pageInfo.getUuid());
+        if (redisUtil == null)
+            srcList = pools.get(pageInfo.getUuid());
+        else
+            srcList = (List<Object>) redisUtil.getObjectFromByte(pageInfo.getUuid());
         if (srcList == null) {
             pageInfo.setStatus("404");
             return pageInfo;
@@ -52,6 +54,7 @@ public class QueryPools {
             pages = total / size;
         else
             pages = total / size + 1;
+
         Integer page = pageInfo.getPage();
         if (page == null || page <= 0)
             page = 1;
