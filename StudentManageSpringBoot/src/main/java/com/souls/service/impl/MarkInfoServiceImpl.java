@@ -1,7 +1,8 @@
-package com.souls.service;
+package com.souls.service.impl;
 
 import com.souls.mapper.MarkInfoMapper;
 import com.souls.po.MarkInfo;
+import com.souls.service.MarkInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

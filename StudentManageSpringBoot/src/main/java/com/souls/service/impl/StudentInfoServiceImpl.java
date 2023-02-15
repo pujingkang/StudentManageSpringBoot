@@ -1,7 +1,8 @@
-package com.souls.service;
+package com.souls.service.impl;
 
 import com.souls.mapper.StudentInfoMapper;
 import com.souls.po.StudentInfo;
+import com.souls.service.StudentInfoService;
 import com.souls.vo.PageInfo;
 import com.souls.vo.StudentInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;

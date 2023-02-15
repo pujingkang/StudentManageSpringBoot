@@ -14,7 +14,7 @@ import java.util.UUID;
 public class QueryAspectInfo {
     RedisUtil redisUtil = null;
     //使用一个返回值为空并且方法体为空的函数来定义切入点
-    @Pointcut("execution(* com.souls.service.*.query*(..))")
+    @Pointcut("execution(* com.souls.service.impl.query*(..))")
     private void myPointCut(){}
 
     @Around("myPointCut()")
